@@ -1,0 +1,118 @@
+{
+  "name": "android-usb-runner",
+  "displayName": "Android USB Runner",
+  "description": "Build and run your Android app on a USB-connected phone with one click.",
+  "version": "1.0.3",
+  "publisher": "android-usb-runner-local",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "android",
+    "usb",
+    "adb",
+    "gradle",
+    "windows"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#061B48",
+    "theme": "dark"
+  },
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "Deploying executes the project's Gradle Wrapper and requires a trusted workspace."
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Android USB Runner needs local Windows project files and USB access."
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "androidUsbRunner.run",
+        "title": "Build, Install & Run",
+        "category": "Android USB"
+      },
+      {
+        "command": "androidUsbRunner.selectDevice",
+        "title": "Select Device",
+        "category": "Android USB"
+      },
+      {
+        "command": "androidUsbRunner.selectProject",
+        "title": "Select Android Project",
+        "category": "Android USB"
+      },
+      {
+        "command": "androidUsbRunner.selectModule",
+        "title": "Select App Module",
+        "category": "Android USB"
+      },
+      {
+        "command": "androidUsbRunner.showOutput",
+        "title": "Show Output",
+        "category": "Android USB"
+      }
+    ],
+    "configuration": {
+      "title": "Android USB Runner",
+      "properties": {
+        "androidUsbRunner.adbPath": {
+          "type": "string",
+          "default": "",
+          "scope": "resource",
+          "description": "Absolute path to adb.exe. Overrides automatic ADB discovery. Windows %ENVIRONMENT_VARIABLES% are supported."
+        },
+        "androidUsbRunner.androidSdkPath": {
+          "type": "string",
+          "default": "",
+          "scope": "resource",
+          "description": "Optional Android SDK directory. Supplies platform-tools/adb.exe and build-tools/aapt2.exe. Overrides automatically discovered SDK locations."
+        },
+        "androidUsbRunner.javaHome": {
+          "type": "string",
+          "default": "",
+          "scope": "resource",
+          "description": "Optional JDK/JBR home directory (containing bin/java.exe). Overrides Java for this extension's Gradle process only."
+        },
+        "androidUsbRunner.gradleTask": {
+          "type": "string",
+          "default": "assembleDebug",
+          "scope": "resource",
+          "pattern": "^:?[A-Za-z0-9_][A-Za-z0-9_.-]*(?::[A-Za-z0-9_][A-Za-z0-9_.-]*)*$",
+          "description": "One assemble task, e.g. assembleDebug or assembleDemoDebug. An unqualified task is scoped to the selected app module. A qualified task must belong to that module. Shell arguments are not accepted."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -watch -p .",
+    "vscode:prepublish": "npm run check:details && npm run compile",
+    "check:details": "node scripts/check-details.js",
+    "test": "npm run compile && tsc -p tsconfig.test.json && node --test out-test/test/*.test.js",
+    "test:host": "npm run compile && tsc -p tsconfig.test.json && node out-test/test/runHost.js",
+    "package": "vsce package --allow-missing-repository --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "1.96.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.0.0",
+    "typescript": "^5.9.3"
+  }
+}
